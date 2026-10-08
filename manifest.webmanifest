@@ -1,0 +1,11 @@
+{
+  "name":"7445 Social",
+  "short_name":"7445",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#ffffff",
+  "theme_color":"#111111",
+  "description":"7445 Social mobile app",
+  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
