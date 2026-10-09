@@ -144,10 +144,29 @@ app.post("/api/posts", auth, asyncRoute(async (req, res) => {
   const { rows } = await pool.query("INSERT INTO posts(user_id,content,image_url) VALUES($1,$2,$3) RETURNING id,user_id,content,image_url,created_at", [req.user.id, content, image_url]);
   res.status(201).json({ post: rows[0] });
 }));
+app.patch("/api/posts/:id", auth, asyncRoute(async (req, res) => {
+  const content = clean(req.body.content), image_url = req.body.image_url ? clean(req.body.image_url) : null;
+  if (content.length > 2000 || (!content && !image_url)) return res.status(400).json({ error: "A post must contain text (up to 2,000 characters) or an image URL." });
+  if (image_url && !/^https:\/\//i.test(image_url)) return res.status(400).json({ error: "Image links must use HTTPS." });
+  const { rows } = await pool.query("UPDATE posts SET content=$1,image_url=$2 WHERE id=$3 AND user_id=$4 RETURNING id,user_id,content,image_url,created_at", [content, image_url, req.params.id, req.user.id]);
+  if (!rows.length) return res.status(404).json({ error: "Post not found or not yours." });
+  res.json({ post: rows[0] });
+}));
 app.delete("/api/posts/:id", auth, asyncRoute(async (req, res) => {
-  const { rowCount } = await pool.query("DELETE FROM posts WHERE id=$1 AND user_id=$2", [req.params.id, req.user.id]);
-  if (!rowCount) return res.status(404).json({ error: "Post not found or not yours." });
-  res.status(204).end();
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    const owned = await client.query("SELECT id FROM posts WHERE id=$1 AND user_id=$2 FOR UPDATE", [req.params.id, req.user.id]);
+    if (!owned.rowCount) { await client.query("ROLLBACK"); return res.status(404).json({ error: "Post not found or not yours." }); }
+    await client.query("DELETE FROM comments WHERE post_id=$1", [req.params.id]);
+    await client.query("DELETE FROM likes WHERE post_id=$1", [req.params.id]);
+    await client.query("DELETE FROM posts WHERE id=$1 AND user_id=$2", [req.params.id, req.user.id]);
+    await client.query("COMMIT");
+    res.status(204).end();
+  } catch (e) {
+    await client.query("ROLLBACK");
+    throw e;
+  } finally { client.release(); }
 }));
 app.post("/api/posts/:id/likes", auth, asyncRoute(async (req, res) => {
   const { rows } = await pool.query("INSERT INTO likes(user_id,post_id) VALUES($1,$2) ON CONFLICT DO NOTHING RETURNING post_id", [req.user.id, req.params.id]);
