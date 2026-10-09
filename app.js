@@ -1,4 +1,4 @@
-const API_BASE = String(window.RENDER_API_BASE || "").replace(/\/$/, "");
+const API_BASE = String(window.RENDER_API_BASE || "https://seven445-social-api.onrender.com/api").replace(/\/$/, "");
 const configured = API_BASE.startsWith("https://") && !API_BASE.includes("YOUR-RENDER-SERVICE");
 const $ = id => document.getElementById(id);
 let mode = "login", token = localStorage.getItem("7445_token") || "", session = null;
