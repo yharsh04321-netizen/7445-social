@@ -2,7 +2,7 @@
   "name": "OneTouch",
   "short_name": "OneTouch",
   "id": "./",
-  "start_url": "./",
+  "start_url": "./?homescreen=4",
   "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -10,7 +10,7 @@
   "description": "OneTouch social app — share moments and connect with people.",
   "icons": [
     {
-      "src": "icon.svg?v=3",
+      "src": "icon-v4.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
