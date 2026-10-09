@@ -10,7 +10,7 @@
   "description": "OneTouch social app — share moments and connect with people.",
   "icons": [
     {
-      "src": "icon-v4.svg",
+      "src": "icon-v5.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
