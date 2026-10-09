@@ -1,0 +1,21 @@
+name: Check Render backend and frontend JavaScript
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check JavaScript syntax
+        run: |
+          node --check backend/server.js
+          node --check app.js
+      - name: Check backend dependencies
+        working-directory: backend
+        run: npm install --ignore-scripts
