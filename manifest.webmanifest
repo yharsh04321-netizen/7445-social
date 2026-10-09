@@ -1,13 +1,19 @@
 {
-  "name":"OneTouch",
-  "short_name":"OneTouch",
-  "start_url":"./",
-  "scope":"./",
-  "display":"standalone",
-  "background_color":"#ffffff",
-  "theme_color":"#111111",
-  "description":"OneTouch social app",
-  "icons":[
-    {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  "name": "OneTouch",
+  "short_name": "OneTouch",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#111111",
+  "description": "OneTouch social app — share moments and connect with people.",
+  "icons": [
+    {
+      "src": "icon.svg?v=2",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
   ]
 }
